@@ -1,4 +1,4 @@
 Flask
+requests
 openai
-icalendar
 gunicorn

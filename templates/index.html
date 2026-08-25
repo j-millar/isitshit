@@ -1,0 +1,1189 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta charset="utf-8">
+
+    <title>Product Reviews</title>
+
+
+    <style>
+
+        body {
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+
+            max-width: 700px;
+
+            margin: auto;
+
+            padding: 20px;
+
+            background: #f5f5f7;
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            margin-bottom: 20px;
+        }
+
+
+        button,
+        .camera-btn {
+
+            position: relative;
+
+            padding: 13px 20px;
+
+            border: 0;
+
+            border-radius: 12px;
+
+            background: #111;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.15s ease,
+                opacity 0.2s ease;
+        }
+
+
+        button:hover,
+        .camera-btn:hover {
+
+            background: #222;
+        }
+
+
+        button:active,
+        .camera-btn:active {
+
+            transform: scale(0.97);
+        }
+
+
+        button:disabled,
+        .camera-btn:disabled {
+
+            cursor: not-allowed;
+
+            opacity: 0.7;
+        }
+
+
+        .camera-btn {
+
+            width: 100%;
+
+            background: #000;
+        }
+
+
+        #photo-input {
+
+            display: none;
+        }
+
+
+        #status {
+
+            margin-top: 14px;
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+
+        .status-error {
+
+            color: #d93025 !important;
+        }
+
+
+        .status-success {
+
+            color: #188038 !important;
+        }
+
+
+        /* ======================================================
+           PRODUCT
+        ====================================================== */
+
+        .product {
+
+            margin-bottom: 20px;
+        }
+
+
+        .product-name {
+
+            font-size: 24px;
+
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+
+        .product-details {
+
+            color: #666;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ======================================================
+           RATING
+        ====================================================== */
+
+        .rating-container {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            margin:
+                25px
+                0;
+        }
+
+
+        .rating-number {
+
+            font-size: 58px;
+
+            font-weight: 700;
+
+            line-height: 1;
+        }
+
+
+        .stars {
+
+            font-size: 28px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .review-count {
+
+            color: #666;
+
+            margin-top: 4px;
+        }
+
+
+        /* ======================================================
+           MATCH INFORMATION
+        ====================================================== */
+
+        .match-info {
+
+            margin-top: 10px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* ======================================================
+           NO RATING
+        ====================================================== */
+
+        .not-found {
+
+            color: #666;
+
+            line-height: 1.5;
+        }
+
+
+        /* ======================================================
+           SEARCH
+        ====================================================== */
+
+        .search-query {
+
+            margin-top: 15px;
+
+            padding: 10px;
+
+            background: #f5f5f7;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            word-break: break-word;
+        }
+
+
+        /* ======================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width:600px) {
+
+            body {
+
+                padding: 12px;
+            }
+
+
+            .card {
+
+                padding: 16px;
+            }
+
+
+            button,
+            .camera-btn {
+
+                width: 100%;
+
+                font-size: 18px;
+            }
+
+        }
+        /* ======================================================
+        SIMILAR PRODUCTS
+        ====================================================== */
+
+        .similar-products {
+
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top:
+                1px solid #eee;
+        }
+
+
+        .similar-products h3 {
+
+            margin:
+                0 0 15px 0;
+
+            font-size: 18px;
+        }
+
+
+        .similar-product {
+
+            padding:
+                12px 0;
+
+            border-bottom:
+                1px solid #eee;
+        }
+
+
+        .similar-product:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .similar-product-name {
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            line-height: 1.4;
+
+            margin-bottom: 5px;
+        }
+
+
+        .similar-product-rating {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+
+        .similar-product-rating strong {
+
+            color: #111;
+
+            font-size: 16px;
+        }
+
+
+        .stars-small {
+
+            letter-spacing: 1px;
+
+            font-size: 16px;
+
+            color: #111;
+        }
+
+
+        .similar-review-count {
+
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<h1>Product Reviews</h1>
+
+
+<div class="card">
+
+    <h2>Scan product</h2>
+
+    <p>
+        Take a photo of the front of the food packaging
+        to find its customer rating.
+    </p>
+
+
+    <input
+        id="photo-input"
+        type="file"
+        name="photo"
+        accept="image/*"
+        capture="environment"
+    >
+
+
+    <button
+        type="button"
+        id="camera-button"
+        class="camera-btn"
+    >
+
+        📷 Scan Product
+
+    </button>
+
+
+    <p id="status"></p>
+
+</div>
+
+
+<div
+    id="result"
+    class="card"
+    style="display:none"
+>
+
+</div>
+
+
+<script>
+
+
+// ============================================================
+// ELEMENTS
+// ============================================================
+
+const photoInput =
+    document.getElementById(
+        "photo-input"
+    );
+
+
+const cameraButton =
+    document.getElementById(
+        "camera-button"
+    );
+
+
+const status =
+    document.getElementById(
+        "status"
+    );
+
+
+const result =
+    document.getElementById(
+        "result"
+    );
+
+
+// ============================================================
+// CAMERA BUTTON
+// ============================================================
+
+cameraButton.addEventListener(
+    "click",
+    function() {
+
+        photoInput.click();
+
+    }
+);
+
+
+// ============================================================
+// PHOTO SELECTED
+// ============================================================
+
+photoInput.addEventListener(
+    "change",
+    async function() {
+
+        if (
+            !this.files ||
+            !this.files.length
+        ) {
+
+            return;
+
+        }
+
+
+        cameraButton.disabled =
+            true;
+
+
+        cameraButton.innerText =
+            "Scanning…";
+
+
+        status.className = "";
+
+
+        status.innerText =
+            "Identifying product…";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            // --------------------------------------------------
+            // Create request
+            // --------------------------------------------------
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "photo",
+                this.files[0]
+            );
+
+
+            status.innerText =
+                "Identifying product and checking Google…";
+
+
+            // --------------------------------------------------
+            // Send to Flask
+            // --------------------------------------------------
+
+            const response =
+                await fetch(
+                    "/scan",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            // --------------------------------------------------
+            // Parse JSON
+            // --------------------------------------------------
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Scan response:",
+                data
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Scan failed."
+                );
+
+            }
+
+
+            if (data.error) {
+
+                throw new Error(
+                    data.error
+                );
+
+            }
+
+
+            // --------------------------------------------------
+            // Display
+            // --------------------------------------------------
+
+            displayResult(data);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            status.className =
+                "status-error";
+
+
+            status.innerText =
+                error.message ||
+                "Could not scan product.";
+
+
+        } finally {
+
+            cameraButton.disabled =
+                false;
+
+
+            cameraButton.innerText =
+                "📷 Scan Product";
+
+
+            // Allow the same photo to be selected again
+
+            photoInput.value = "";
+
+        }
+
+    }
+);
+
+
+// ============================================================
+// DISPLAY RESULT
+// ============================================================
+
+function displayResult(data) {
+
+    result.innerHTML = "";
+
+
+    // ========================================================
+    // PRODUCT
+    // ========================================================
+
+    const product =
+        data.product || {};
+
+
+    const productName =
+        product.product_name ||
+        "Product";
+
+
+    const brand =
+        product.brand ||
+        "";
+
+
+    const variant =
+        product.variant ||
+        "";
+
+
+    const size =
+        product.size ||
+        "";
+
+
+    const productDiv =
+        document.createElement(
+            "div"
+        );
+
+
+    productDiv.className =
+        "product";
+
+
+    let details = "";
+
+
+    if (brand) {
+
+        details += escapeHtml(
+            brand
+        );
+
+    }
+
+
+    if (variant) {
+
+        if (details) {
+            details += " · ";
+        }
+
+        details += escapeHtml(
+            variant
+        );
+
+    }
+
+
+    if (size) {
+
+        if (details) {
+            details += " · ";
+        }
+
+        details += escapeHtml(
+            size
+        );
+
+    }
+
+
+    productDiv.innerHTML = `
+
+        <div class="product-name">
+
+            ${escapeHtml(productName)}
+
+        </div>
+
+        ${
+            details
+                ? `
+                    <div class="product-details">
+                        ${details}
+                    </div>
+                  `
+                : ""
+        }
+
+    `;
+
+
+    result.appendChild(
+        productDiv
+    );
+
+
+    // ========================================================
+    // RATING
+    // ========================================================
+
+    const rating =
+        data.rating;
+
+
+    if (
+        !rating ||
+        rating.rating === null ||
+        rating.rating === undefined
+    ) {
+
+        displayNoRating(
+            data
+        );
+
+        return;
+
+    }
+
+
+    const numericRating =
+        Number(
+            rating.rating
+        );
+
+
+    const reviewCount =
+        Number(
+            rating.review_count || 0
+        );
+
+
+    // --------------------------------------------------------
+    // Rating container
+    // --------------------------------------------------------
+
+    const ratingContainer =
+        document.createElement(
+            "div"
+        );
+
+
+    ratingContainer.className =
+        "rating-container";
+
+
+    ratingContainer.innerHTML = `
+
+        <div class="rating-number">
+
+            ${
+                Number.isFinite(numericRating)
+                    ? numericRating.toFixed(1)
+                    : "—"
+            }
+
+        </div>
+
+
+        <div>
+
+            <div class="stars">
+
+                ${
+                    Number.isFinite(numericRating)
+                        ? createStars(numericRating)
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="review-count">
+
+                ${
+                    reviewCount.toLocaleString()
+                }
+
+                Google reviews
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    result.appendChild(
+        ratingContainer
+    );
+
+
+    // ========================================================
+    // MATCH INFORMATION
+    // ========================================================
+
+    const matchInfo =
+        document.createElement(
+            "div"
+        );
+
+
+    matchInfo.className =
+        "match-info";
+
+
+    const matchScore =
+        Number(
+            rating.match_score
+        );
+
+
+    if (
+        Number.isFinite(matchScore)
+    ) {
+
+        matchInfo.innerHTML = `
+
+            Matched Google result:
+            <strong>
+                ${escapeHtml(
+                    rating.title || ""
+                )}
+            </strong>
+
+        `;
+
+
+        result.appendChild(
+            matchInfo
+        );
+
+    }
+
+
+    // ========================================================
+    // SEARCH QUERY
+    // ========================================================
+
+    if (data.search_query) {
+
+        const searchDiv =
+            document.createElement(
+                "div"
+            );
+
+
+        searchDiv.className =
+            "search-query";
+
+
+        searchDiv.innerHTML = `
+
+            Search used:
+            ${escapeHtml(
+                data.search_query
+            )}
+
+        `;
+
+
+        result.appendChild(
+            searchDiv
+        );
+
+    }
+        // ========================================================
+    // TOP 3 SIMILAR PRODUCTS
+    // ========================================================
+
+    const similarProducts =
+        data.similar_products || [];
+
+
+    if (similarProducts.length) {
+
+        const similarDiv =
+            document.createElement(
+                "div"
+            );
+
+
+        similarDiv.className =
+            "similar-products";
+
+
+        similarDiv.innerHTML = `
+
+            <h3>
+                Top rated similar products
+            </h3>
+
+        `;
+
+
+        similarProducts.forEach(
+            function(product) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "similar-product";
+
+
+                const productRating =
+                    Number(
+                        product.rating
+                    );
+
+
+                const reviewCount =
+                    Number(
+                        product.review_count || 0
+                    );
+
+
+                item.innerHTML = `
+
+                    <div class="similar-product-name">
+
+                        ${escapeHtml(
+                            product.title || "Product"
+                        )}
+
+                    </div>
+
+
+                    <div class="similar-product-rating">
+
+                        <strong>
+                            ${
+                                Number.isFinite(
+                                    productRating
+                                )
+                                    ? productRating.toFixed(1)
+                                    : "—"
+                            }
+                        </strong>
+
+                        <span class="stars-small">
+
+                            ${
+                                Number.isFinite(
+                                    productRating
+                                )
+                                    ? createStars(
+                                        productRating
+                                    )
+                                    : ""
+                            }
+
+                        </span>
+
+                        <span class="similar-review-count">
+
+                            ${
+                                reviewCount.toLocaleString()
+                            }
+                            reviews
+
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                similarDiv.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+        result.appendChild(
+            similarDiv
+        );
+
+    }
+
+    // ========================================================
+    // SHOW
+    // ========================================================
+
+    result.style.display =
+        "block";
+
+
+    status.className =
+        "status-success";
+
+
+    status.innerText =
+        "Product found.";
+
+}
+
+
+// ============================================================
+// NO RATING
+// ============================================================
+
+function displayNoRating(data) {
+
+    const notFound =
+        document.createElement(
+            "div"
+        );
+
+
+    notFound.className =
+        "not-found";
+
+
+    notFound.innerHTML = `
+
+        <strong>
+            No Google customer rating found.
+        </strong>
+
+        <p>
+
+            Google found the product, but there
+            isn't currently an aggregated customer
+            rating available.
+
+        </p>
+
+        ${
+            data.search_query
+                ? `
+                    <div class="search-query">
+
+                        Search used:
+                        ${escapeHtml(
+                            data.search_query
+                        )}
+
+                    </div>
+                  `
+                : ""
+        }
+
+    `;
+
+
+    result.appendChild(
+        notFound
+    );
+
+
+    result.style.display =
+        "block";
+
+
+    status.className =
+        "status-success";
+
+
+    status.innerText =
+        "Product identified.";
+
+}
+
+
+// ============================================================
+// CREATE STARS
+// ============================================================
+
+function createStars(rating) {
+
+    const rounded =
+        Math.round(
+            Number(rating)
+        );
+
+
+    let stars = "";
+
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        if (i <= rounded) {
+
+            stars += "★";
+
+        } else {
+
+            stars += "☆";
+
+        }
+
+    }
+
+
+    return stars;
+
+}
+
+
+// ============================================================
+// HTML ESCAPING
+// ============================================================
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
